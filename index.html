@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gut Guide">
+<meta name="theme-color" content="#1f6f63">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2315302c'/%3E%3Ccircle cx='32' cy='16' r='8' fill='%23d2453b'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23d9a400'/%3E%3Ccircle cx='32' cy='48' r='8' fill='%232f9e58'/%3E%3C/svg%3E">
+<title>Stacie's Gut Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one-column phone app, sticky header, bottom tab bar; three views (Check, Log, Reintro). */
+:root{
+  --bg:#f3f6f5; --surface:#ffffff; --ink:#15302c; --muted:#5b706c; --line:#d7e1de; --accent:#1f6f63; --accent-ink:#ffffff;
+  --green:#2f9e58; --green-bg:#e3f4e8; --yellow:#d9a400; --yellow-bg:#fbf2d2; --red:#d2453b; --red-bg:#fbe3e0;
+  --display:"Bricolage Grotesque",ui-rounded,"Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1918; --surface:#172422; --ink:#e4efec; --muted:#97aba7; --line:#2a3b38; --accent:#5cc3b1; --accent-ink:#06201c;
+  --green:#4cc777; --green-bg:#173323; --yellow:#f0c23a; --yellow-bg:#352c10; --red:#f0766c; --red-bg:#3a1c1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1918; --surface:#172422; --ink:#e4efec; --muted:#97aba7; --line:#2a3b38; --accent:#5cc3b1; --accent-ink:#06201c;
+  --green:#4cc777; --green-bg:#173323; --yellow:#f0c23a; --yellow-bg:#352c10; --red:#f0766c; --red-bg:#3a1c1a; color-scheme:dark}
+html,body{background:var(--bg);color:var(--ink)}
+body{margin:0;font-family:var(--body);font-size:16px;line-height:1.45}
+*{box-sizing:border-box}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 110px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 10px;display:flex;align-items:center;gap:12px}
+.lights{display:flex;flex-direction:column;gap:3px;background:var(--ink);padding:5px 4px;border-radius:9px}
+.lights i{width:9px;height:9px;border-radius:50%;display:block}
+.lights i:nth-child(1){background:var(--red)}.lights i:nth-child(2){background:var(--yellow)}.lights i:nth-child(3){background:var(--green)}
+h1{font-family:var(--display);font-weight:800;font-size:1.45rem;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:.85rem;margin:0}
+h2{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0 0 4px;text-wrap:balance}
+.section{display:flex;flex-direction:column;gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+label.lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
+input[type=text],input[type=search],input[type=datetime-local],textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+textarea{min-height:90px;resize:vertical}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 14px;font-weight:700}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button.small{padding:6px 10px;font-size:.85rem}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row > *{flex:1 1 140px;min-width:0}
+.foods{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.food{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+.food .nm{font-weight:700}
+.food .nt{color:var(--muted);font-size:.9rem}
+.dot{width:16px;height:16px;border-radius:50%;margin-top:3px}
+.dot.g{background:var(--green)}.dot.y{background:var(--yellow)}.dot.r{background:var(--red)}
+.verdict{border-radius:14px;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.verdict.g{background:var(--green-bg)}.verdict.y{background:var(--yellow-bg)}.verdict.r{background:var(--red-bg)}
+.signal{display:flex;flex-direction:column;gap:5px;background:var(--ink);padding:7px 6px;border-radius:12px}
+.signal i{width:20px;height:20px;border-radius:50%;opacity:.18;display:block}
+.signal i.r{background:var(--red)}.signal i.y{background:var(--yellow)}.signal i.g{background:var(--green)}
+.signal i.on{opacity:1;box-shadow:0 0 10px currentColor}
+.verdict .big{font-family:var(--display);font-weight:800;font-size:1.3rem}
+.flags{display:flex;flex-direction:column;gap:6px;margin:8px 0 0;padding:0;list-style:none;font-size:.93rem}
+.flags b{font-weight:700}
+.note{color:var(--muted);font-size:.85rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border-radius:999px;padding:6px 12px;font-weight:400;font-size:.9rem}
+.chip[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.sev{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sev button{padding:8px 4px;font-size:.85rem}
+.sev button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.day{font-family:var(--display);font-weight:600;margin:6px 0 0;color:var(--muted);font-size:.95rem}
+.entry{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.entry .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.entry .t{color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{display:inline-block;font-size:.75rem;border:1px solid var(--line);border-radius:6px;padding:1px 7px;margin-right:4px;color:var(--muted)}
+.sevbar{display:inline-flex;gap:3px;vertical-align:middle}
+.sevbar i{width:14px;height:6px;border-radius:2px;background:var(--line);display:block}
+.sevbar.s1 i:nth-child(-n+1){background:var(--yellow)}.sevbar.s2 i:nth-child(-n+2){background:var(--yellow)}.sevbar.s3 i{background:var(--red)}
+.grp{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+.grp .nm{font-weight:700}
+.grp select{width:auto;padding:7px 8px;font-size:.9rem}
+.grp .nt{grid-column:1/-1;color:var(--muted);font-size:.88rem}
+.empty{text-align:center;color:var(--muted);padding:28px 10px;border:1px dashed var(--line);border-radius:14px}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+nav.tabs button{border:0;border-radius:0;background:transparent;padding:12px 4px 14px;color:var(--muted);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav.tabs button[aria-selected=true]{color:var(--accent)}
+nav.tabs svg{width:22px;height:22px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(80px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:20}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+#reader{width:100%;border-radius:12px;overflow:hidden}
+#reader video{border-radius:12px}
+.disclaim{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+</style>
+</head><body>
+
+<div class="wrap">
+  <header>
+    <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+    <div><h1>Stacie's Gut Guide</h1><p class="sub">Gentle FODMAP · check it, log it, test it</p></div>
+  </header>
+
+  <!-- CHECK -->
+  <main id="view-check" class="section">
+    <div class="panel">
+      <h2>Check a food</h2>
+      <input type="search" id="q" placeholder="Try garlic, oats, avocado…" autocomplete="off" aria-label="Search foods">
+      <div class="foods" id="foods"></div>
+      <p class="note" id="foodsMore"></p>
+    </div>
+
+    <div class="panel">
+      <h2>Check a packaged food</h2>
+      <p class="note">Scan the barcode to look up its ingredients in the free Open Food Facts database. If it isn't found, paste the ingredients instead.</p>
+      <div class="row">
+        <button class="primary" id="scanCam" type="button">Scan barcode</button>
+        <button id="stopCam" type="button" hidden>Stop camera</button>
+      </div>
+      <div id="reader"></div>
+      <div class="row"><input type="text" id="upc" inputmode="numeric" placeholder="Or type the barcode number" aria-label="Barcode number"><button id="upcBtn" type="button">Look up</button></div>
+      <p class="note" id="lookupNote"></p>
+      <label class="lbl" for="ing">Or paste ingredients</label>
+      <p class="note" style="margin:-6px 0 0">Tip: take a photo of the ingredient list, press and hold the text in Photos to copy it, then paste here.</p>
+      <textarea id="ing" placeholder="Enriched wheat flour, sugar, onion powder, natural flavors…"></textarea>
+      <div class="row"><input type="text" id="prodName" placeholder="Product name (optional)" aria-label="Product name"><button id="scanBtn" type="button">Check ingredients</button></div>
+      <div id="labelResult"></div>
+    </div>
+    <p class="disclaim">Ratings follow general low-FODMAP guidance for typical servings. Her dietitian's advice wins when it differs.</p>
+  </main>
+
+  <!-- LOG -->
+  <section id="view-log" class="section" hidden>
+    <form class="panel" id="logForm">
+      <h2>Log a meal or symptom</h2>
+      <div><label class="lbl" for="lf-food">What did you eat?</label>
+        <input type="text" id="lf-food" placeholder="Rice bowl with chicken, ½ avocado" required></div>
+      <div class="row">
+        <div><label class="lbl" for="lf-when">When</label><input type="datetime-local" id="lf-when"></div>
+        <div><label class="lbl" for="lf-phase">Phase</label>
+          <select id="lf-phase">
+            <option value="elim">Gentle / everyday</option>
+            <option value="d1">Challenge · day 1 (small)</option>
+            <option value="d2">Challenge · day 2 (medium)</option>
+            <option value="d3">Challenge · day 3 (large)</option>
+            <option value="wash">Washout day</option>
+          </select></div>
+      </div>
+      <div id="grpWrap" hidden><label class="lbl" for="lf-group">Testing which group?</label><select id="lf-group"></select></div>
+      <div><span class="lbl">Symptoms</span>
+        <div class="chips" id="symChips"></div></div>
+      <div><span class="lbl">How bad?</span>
+        <div class="sev" id="sev"></div></div>
+      <div><label class="lbl" for="lf-notes">Notes</label><input type="text" id="lf-notes" placeholder="Stress, sleep, portion size…"></div>
+      <button class="primary" type="submit">Save entry</button>
+    </form>
+    <div class="panel">
+      <h2>Backup</h2>
+      <p class="note">The log lives only on this phone. Save a backup now and then, and restore it if you switch phones.</p>
+      <div class="row"><button type="button" id="expBtn">Save backup file</button><button type="button" id="impBtn">Restore backup</button><input type="file" id="impFile" accept="application/json,.json" hidden></div>
+    </div>
+    <div id="logList" class="section"></div>
+  </section>
+
+  <!-- REINTRO -->
+  <section id="view-re" class="section" hidden>
+    <div class="panel">
+      <h2>Reintroduction tracker</h2>
+      <p class="note">Test one group at a time: a small portion on day 1, medium on day 2, large on day 3, then 2–3 normal days before the next group. Stop early if symptoms are clear. Log each challenge day in the Log tab and it shows up here.</p>
+      <div id="groups"></div>
+    </div>
+    <p class="disclaim">Follow the schedule her dietitian sets. This tracker just keeps the record.</p>
+  </section>
+</div>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-v="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>Check</button>
+  <button role="tab" aria-selected="false" data-v="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Log</button>
+  <button role="tab" aria-selected="false" data-v="re"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Reintro</button>
+</nav>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+/* ---------- food reference (general low-FODMAP guidance, typical servings) ---------- */
+const FOODS=[
+// green
+["White or brown rice","g","Safe at normal portions."],["Quinoa","g","Safe."],["Potatoes","g","Safe."],["Oats (rolled)","g","Up to about ½ cup dry."],
+["Gluten-free bread","g","Check the label for inulin, apple or honey."],["Sourdough spelt bread","g","Traditional slow-rise sourdough is low."],["Corn tortillas","g","Safe."],["Rice noodles","g","Safe."],
+["Carrots","g","Safe."],["Zucchini","g","Fine at about ⅔ cup; large amounts are moderate."],["Cucumber","g","Safe."],["Spinach","g","Safe."],["Lettuce","g","Safe."],["Kale","g","Safe."],["Bok choy","g","Safe."],
+["Red bell pepper","g","Safe."],["Tomato","g","Fresh tomatoes are fine."],["Eggplant","g","Fine at about 1 cup."],["Green beans","g","Fine at about 15 beans."],["Green onion tops (green part)","g","Green part only. The white bulb is high."],["Chives","g","Safe onion flavor."],
+["Firm (slightly green) banana","g","Firm bananas are low. Ripe spotty ones are not."],["Strawberries","g","Safe."],["Blueberries","g","Fine at about 1 cup."],["Oranges","g","One medium orange."],["Kiwi","g","Two small kiwis."],["Pineapple","g","About 1 cup."],["Grapes","g","About 1 cup."],["Cantaloupe","g","About ¾ cup."],["Raspberries","g","About ⅓ cup."],
+["Eggs","g","Safe."],["Chicken","g","Plain meat is safe. Watch marinades and rubs."],["Beef","g","Plain meat is safe."],["Pork","g","Plain meat is safe."],["Fish and shellfish","g","Safe unless breaded or sauced."],["Firm tofu","g","Firm/pressed tofu is low. Silken is high."],["Tempeh","g","Safe."],
+["Lactose-free milk","g","Safe."],["Almond milk","g","Safe."],["Cheddar, Parmesan, Swiss","g","Hard cheeses are naturally low in lactose."],["Butter","g","Safe."],["Lactose-free yogurt","g","Safe."],
+["Olive oil","g","All plain oils are safe."],["Garlic-infused oil","g","Gets garlic flavor without the fructans."],["Maple syrup","g","Safe."],["Table sugar","g","Safe in normal amounts."],
+["Peanut butter","g","About 2 tbsp. Check for added honey."],["Peanuts","g","About 32 nuts."],["Walnuts","g","About 10 halves."],["Macadamias","g","About 20 nuts."],["Pumpkin seeds","g","About 2 tbsp."],
+["Ginger","g","Safe."],["Fresh herbs","g","Basil, cilantro, parsley, rosemary, thyme are safe."],["Mustard","g","Safe."],["Soy sauce","g","Fine at about 2 tbsp."],["Coffee","g","Black coffee is low. Caffeine can still irritate."],["Black or peppermint tea","g","Safe."],["Popcorn","g","Plain, about 7 cups popped."],["Dark chocolate","g","About 5 squares (30 g)."],
+// yellow
+["Avocado","y","About ⅛ of an avocado is fine. A half is high in sorbitol."],["Sweet potato","y","About ½ cup is fine. More is moderate."],["Broccoli","y","Heads are fine (¾ cup). Stalks are higher."],["Almonds","y","10 almonds is fine. More is high."],
+["Canned chickpeas","y","¼ cup, rinsed. Dried-and-cooked are higher."],["Canned lentils","y","½ cup, rinsed."],["Celery","y","A small stick (10 cm) is fine. More is high in mannitol."],["Green peas","y","About 1 tbsp only."],
+["Butternut squash","y","About ⅓ cup is fine."],["Ripe banana","y","About ⅓ of a ripe banana."],["Sweet corn","y","About ½ cob."],["Wheat pasta","y","About ½ cup cooked is usually tolerated on gentle FODMAP."],
+["Regular yogurt","y","Lactose. A few spoonfuls may be fine; try lactose-free."],["Cow's milk","y","Lactose. A splash in coffee is often fine; a glass is high."],["Beets","y","About 2 slices."],["Brussels sprouts","y","About 2 sprouts."],
+["Coconut milk (canned)","y","About ½ cup."],["Cottage cheese","y","Some lactose. Small portions."],["Cabbage","y","Common and red cabbage fine at about ¾ cup. Savoy is higher."],["Hummus","y","Usually contains garlic. Small amount or garlic-free versions."],
+// red
+["Garlic","r","High in fructans. Use garlic-infused oil instead."],["Onion","r","High in fructans, even cooked. Use chives or green onion tops."],["Onion or garlic powder","r","Concentrated fructans. A common hidden source."],["Leek (white part)","r","High. The green leaves are fine."],["Shallots","r","High."],
+["Regular wheat bread","r","High in fructans. Try sourdough spelt or gluten-free."],["Rye bread","r","High."],["Barley","r","High."],
+["Apples","r","High in fructose and sorbitol."],["Pears","r","High."],["Watermelon","r","High in fructose and mannitol."],["Mango","r","High in fructose."],["Cherries","r","High."],["Dried fruit (raisins, dates)","r","Concentrated. Very high."],["Fruit juice","r","Concentrated fructose."],
+["Honey","r","High in fructose."],["Agave","r","High in fructose."],["High fructose corn syrup","r","High."],["Sugar-free gum or mints","r","Usually sorbitol, mannitol or xylitol."],
+["Cauliflower","r","High in mannitol."],["Mushrooms (button)","r","High. Oyster mushrooms are low."],["Asparagus","r","High."],["Artichoke","r","High."],["Snow peas","r","High."],
+["Kidney or black beans","r","High in GOS."],["Cashews","r","High."],["Pistachios","r","High."],["Ice cream","r","Lactose. Try lactose-free or sorbet."],["Ricotta","r","High lactose."],["Silken tofu","r","High. Firm tofu is fine."]
+];
+const LV={g:{word:"Go ahead",cls:"g"},y:{word:"Watch the portion",cls:"y"},r:{word:"Skip for now",cls:"r"}};
+
+/* ---------- ingredient keyword scan ---------- */
+const SAFE_PHRASES=[/garlic[- ]infused/gi,/lactose[- ]free(\s+(milk|yogurt|cream|cheese))?/gi,/green onion tops?/gi,/(almond|rice|coconut) milk/gi,/whey protein isolate/gi,/cocoa butter/gi,/peanut butter/gi];
+const TERMS=[
+ [/\bgarlic\b/i,"r","Garlic","fructans"],[/\bonions?\b/i,"r","Onion","fructans"],[/\binulin\b/i,"r","Inulin","added fructans (fiber)"],[/chicory/i,"r","Chicory root","added fructans (fiber)"],
+ [/fructo-?oligosaccharides?|\bFOS\b/i,"r","FOS","added fructans"],[/high[- ]fructose corn syrup|\bHFCS\b/i,"r","High fructose corn syrup","excess fructose"],[/\bhoney\b/i,"r","Honey","excess fructose"],[/\bagave\b/i,"r","Agave","excess fructose"],
+ [/sorbitol/i,"r","Sorbitol","polyol"],[/mannitol/i,"r","Mannitol","polyol"],[/xylitol/i,"r","Xylitol","polyol"],[/maltitol/i,"r","Maltitol","polyol"],[/isomalt/i,"r","Isomalt","polyol"],
+ [/(apple|pear|mango) (juice|puree|powder)|fruit juice concentrate/i,"r","Fruit juice/puree","excess fructose"],[/\b(enriched |whole )?wheat flour|enriched flour|\bsemolina\b|\bdurum\b/i,"r","Wheat flour","fructans (main ingredient)"],
+ [/\brye\b/i,"r","Rye","fructans"],[/\bbarley\b|malt(ed)? barley/i,"r","Barley","fructans"],[/soy flour/i,"r","Soy flour","GOS"],[/cashew/i,"r","Cashew","GOS/fructans"],[/pistachio/i,"r","Pistachio","GOS/fructans"],
+ [/raisins?|\bdates?\b|dried (apple|apricot|fig|cranberr)/i,"r","Dried fruit","concentrated fructose/polyols"],[/\bapples?\b|\bpears?\b|watermelon|\bcherr(y|ies)\b/i,"r","High-FODMAP fruit","fructose/polyols"],
+ [/\bwheat\b/i,"y","Wheat (minor)","small amounts are usually OK"],[/natural flavou?rs?/i,"y","Natural flavors","can hide garlic or onion"],[/\bspices?\b|seasoning/i,"y","Spices/seasoning","can hide garlic or onion"],
+ [/\bmilk\b|milk solids|\bcream\b|\bwhey\b|\blactose\b|nonfat dry milk|buttermilk/i,"y","Dairy","lactose; fine if lactose-free or tolerated"],[/chickpea|lentil|pea protein|\bbeans?\b/i,"y","Legumes","GOS, portion matters"],
+ [/molasses|polydextrose|\bsoy (protein )?concentrate/i,"y","Moderate additive","portion matters"],[/coconut (flour|water)/i,"y","Coconut product","portion matters"],[/oligofructose/i,"r","Oligofructose","added fructans"]
+];
+function scanText(text){
+  let t=" "+text+" "; SAFE_PHRASES.forEach(rx=>t=t.replace(rx," ~safe~ "));
+  const hits=[]; const seen=new Set();
+  for(const [rx,lv,name,why] of TERMS){ if(name==="Wheat (minor)"&&seen.has("Wheat flour"))continue; if(rx.test(t)&&!seen.has(name)){seen.add(name);hits.push({level:lv,name,why});}}
+  const lvl=hits.some(h=>h.level==="r")?"r":hits.some(h=>h.level==="y")?"y":"g";
+  return {level:lvl,hits};
+}
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2200);}
+function signal(lv){return `<span class="signal" aria-hidden="true"><i class="r ${lv==="r"?"on":""}"></i><i class="y ${lv==="y"?"on":""}"></i><i class="g ${lv==="g"?"on":""}"></i></span>`;}
+function verdictHTML(lv,title,body){return `<div class="verdict ${lv}" role="status">${signal(lv)}<div style="min-width:0"><div class="big">${esc(LV[lv].word)}</div><div>${title}</div>${body||""}</div></div>`;}
+
+/* ---------- tabs ---------- */
+const views={check:"#view-check",log:"#view-log",re:"#view-re"};
+function show(v){document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v));
+  Object.entries(views).forEach(([k,s])=>$(s).hidden=k!==v); window.scrollTo(0,0); try{localStorage.setItem("gg-tab",v)}catch(e){}}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+
+/* ---------- food search ---------- */
+function renderFoods(){
+  const q=$("#q").value.trim().toLowerCase();
+  let list=q?FOODS.filter(f=>f[0].toLowerCase().includes(q)||f[2].toLowerCase().includes(q)):FOODS.filter(f=>["Garlic","Onion","Avocado","Oats (rolled)","Garlic-infused oil","Apples","Sweet potato","Strawberries"].includes(f[0])).sort((a,b)=>({r:0,y:1,g:2})[a[1]]-({r:0,y:1,g:2})[b[1]]);
+  const order={r:0,y:1,g:2}; if(q) list=list.slice().sort((a,b)=>order[a[1]]-order[b[1]]);
+  $("#foods").innerHTML=list.slice(0,30).map(f=>`<div class="food"><span class="dot ${f[1]}" aria-label="${LV[f[1]].word}"></span><div style="min-width:0"><div class="nm">${esc(f[0])}</div><div class="nt">${esc(f[2])}</div></div><button class="small" type="button" data-log="${esc(f[0])}">Log</button></div>`).join("")
+    || `<div class="food"><span class="dot y"></span><div><div class="nm">Not in the list</div><div class="nt">Paste its ingredients below, or ask her dietitian.</div></div><span></span></div>`;
+  $("#foodsMore").textContent=q?"":`Showing a few examples from ${FOODS.length} common foods. Type to search.`;
+}
+$("#q").addEventListener("input",renderFoods);
+$("#foods").addEventListener("click",e=>{const n=e.target.dataset.log;if(n){prefillLog(n);}});
+
+/* ---------- label check (paste) ---------- */
+function renderScan(res,name,extra){
+  const list=res.hits.length?`<ul class="flags">${res.hits.map(h=>`<li><span class="dot ${h.level}" style="display:inline-block;width:10px;height:10px;margin:0 6px 0 0"></span><b>${esc(h.name)}</b> · ${esc(h.why)}</li>`).join("")}</ul>`:`<p class="note" style="margin:6px 0 0">No common FODMAP ingredients found.</p>`;
+  $("#labelResult").innerHTML=verdictHTML(res.level,esc(name||"This product"),list+(extra||""))+`<div class="row" style="margin-top:10px"><button type="button" class="small" id="logProd">Log this food</button></div>`;
+  $("#logProd").onclick=()=>prefillLog(name||"Packaged food");
+}
+$("#scanBtn").onclick=()=>{const t=$("#ing").value.trim(); if(!t){toast("Paste the ingredients first");return;} renderScan(scanText(t),$("#prodName").value.trim());};
+
+/* ---------- barcode lookup (Open Food Facts) ---------- */
+async function lookup(code){
+  code=String(code).replace(/\D/g,""); if(code.length<8){toast("That barcode looks too short");return;}
+  $("#lookupNote").textContent="Looking up "+code+"…";
+  try{
+    const r=await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?fields=product_name,brands,ingredients_text_en,ingredients_text`);
+    const j=await r.json();
+    const p=j&&j.product; const ing=p&&(p.ingredients_text_en||p.ingredients_text);
+    if(!p){$("#lookupNote").textContent=`Barcode ${code} isn't in the database yet. Paste the ingredients below.`;return;}
+    const name=[p.brands&&p.brands.split(",")[0],p.product_name].filter(Boolean).join(" ");
+    $("#prodName").value=name;
+    if(!ing){$("#lookupNote").textContent=`Found ${name||"the product"}, but it has no ingredient list on file. Paste it below.`;return;}
+    $("#ing").value=ing; $("#lookupNote").textContent="Ingredients from Open Food Facts. Double-check against the package.";
+    renderScan(scanText(ing),name);
+  }catch(e){$("#lookupNote").textContent="Couldn't reach the database. Check the connection, or paste the ingredients.";}
+}
+let cam=null;
+async function stopCam(){ if(cam){try{await cam.stop();}catch(e){} try{cam.clear();}catch(e){} cam=null;} $("#stopCam").hidden=true; $("#scanCam").hidden=false; }
+$("#scanCam").onclick=async()=>{
+  if(!window.Html5Qrcode){toast("Scanner didn't load. Type the number instead.");return;}
+  const F=Html5QrcodeSupportedFormats;
+  cam=new Html5Qrcode("reader",{formatsToSupport:[F.UPC_A,F.UPC_E,F.EAN_13,F.EAN_8],verbose:false});
+  $("#scanCam").hidden=true; $("#stopCam").hidden=false;
+  try{
+    await cam.start({facingMode:"environment"},{fps:10,qrbox:(w,h)=>({width:Math.min(300,w*.85),height:Math.min(140,h*.5)})},
+      async code=>{ if(navigator.vibrate) navigator.vibrate(60); await stopCam(); $("#upc").value=code; lookup(code); }, ()=>{});
+  }catch(e){ await stopCam(); toast("Camera blocked. Allow camera access, or type the number."); }
+};
+$("#stopCam").onclick=stopCam;
+$("#upcBtn").onclick=()=>lookup($("#upc").value);
+$("#upc").addEventListener("keydown",e=>{if(e.key==="Enter")lookup($("#upc").value);});
+
+/* ---------- storage: this phone only ---------- */
+let entries=[], statuses={};
+const LS={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast("Storage is full or blocked")}}};
+const store={
+  async add(e){ e.id="l"+Date.now(); entries.unshift(e); entries.sort((a,b)=>b.ts-a.ts); LS.set("gg-log",entries); renderLog(); renderGroups(); },
+  async remove(id){ entries=entries.filter(x=>x.id!==id); LS.set("gg-log",entries); renderLog(); renderGroups(); },
+  async setStatus(g,v){ statuses[g]=v; LS.set("gg-status",statuses); renderGroups(); }
+};
+$("#expBtn").onclick=()=>{
+  const blob=new Blob([JSON.stringify({app:"gut-guide",v:1,saved:new Date().toISOString(),entries,statuses},null,1)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="gut-guide-backup-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);
+};
+$("#impBtn").onclick=()=>$("#impFile").click();
+$("#impFile").onchange=async e=>{
+  const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  try{ const d=JSON.parse(await f.text()); if(!Array.isArray(d.entries)) throw 0;
+    const ids=new Set(entries.map(x=>x.id)); d.entries.forEach(x=>{if(!ids.has(x.id))entries.push(x);});
+    entries.sort((a,b)=>b.ts-a.ts); statuses={...statuses,...(d.statuses||{})};
+    LS.set("gg-log",entries); LS.set("gg-status",statuses); renderLog(); renderGroups(); toast("Backup restored");
+  }catch(err){ toast("That file isn't a Gut Guide backup"); }
+};
+
+/* ---------- log form ---------- */
+const GROUPS=[
+ ["fructose","Fructose","Honey (1–2 tsp) or ½–1 mango"],["lactose","Lactose","½–1 cup cow's milk or regular yogurt"],
+ ["fructan-wheat","Fructans · wheat","1–2 slices regular wheat bread"],["fructan-garlic","Fructans · garlic","¼–1 clove garlic in a meal"],
+ ["fructan-onion","Fructans · onion","¼–½ onion, cooked"],["gos","GOS","¼–½ cup kidney or black beans"],
+ ["sorbitol","Sorbitol","¼–½ avocado or a few blackberries"],["mannitol","Mannitol","¼–½ cup button mushrooms or cauliflower"]
+];
+const SYMS=["None","Bloating","Pain","Gas","Diarrhea","Constipation","Nausea","Reflux","Fatigue"];
+const SEV=["None","Mild","Moderate","Severe"];
+let pickedSyms=new Set(["None"]), pickedSev=0;
+$("#lf-group").innerHTML=GROUPS.map(g=>`<option value="${g[0]}">${esc(g[1])}</option>`).join("");
+$("#symChips").innerHTML=SYMS.map(s=>`<button type="button" class="chip" aria-pressed="${s==="None"}" data-s="${s}">${s}</button>`).join("");
+$("#sev").innerHTML=SEV.map((s,i)=>`<button type="button" aria-pressed="${i===0}" data-i="${i}">${s}</button>`).join("");
+$("#symChips").onclick=e=>{const s=e.target.dataset.s;if(!s)return;
+  if(s==="None"){pickedSyms=new Set(["None"]);setSev(0);} else {pickedSyms.delete("None");pickedSyms.has(s)?pickedSyms.delete(s):pickedSyms.add(s);if(!pickedSyms.size)pickedSyms.add("None");}
+  document.querySelectorAll("#symChips .chip").forEach(b=>b.setAttribute("aria-pressed",pickedSyms.has(b.dataset.s)));};
+function setSev(i){pickedSev=i;document.querySelectorAll("#sev button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.i===i));}
+$("#sev").onclick=e=>{if(e.target.dataset.i!=null)setSev(+e.target.dataset.i);};
+$("#lf-phase").onchange=()=>{$("#grpWrap").hidden=!["d1","d2","d3","wash"].includes($("#lf-phase").value);};
+function nowLocal(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);}
+function prefillLog(name){show("log");$("#lf-food").value=name;$("#lf-when").value=nowLocal();$("#lf-food").focus();}
+$("#lf-when").value=nowLocal();
+$("#logForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const phase=$("#lf-phase").value;
+  const entry={food:$("#lf-food").value.trim(),ts:new Date($("#lf-when").value||Date.now()).getTime(),phase,
+    group:["d1","d2","d3","wash"].includes(phase)?$("#lf-group").value:"",symptoms:[...pickedSyms].filter(s=>s!=="None"),severity:pickedSev,notes:$("#lf-notes").value.trim()};
+  if(!entry.food){toast("Add what you ate");return;}
+  try{await store.add(entry);toast("Saved");$("#lf-food").value="";$("#lf-notes").value="";$("#lf-when").value=nowLocal();pickedSyms=new Set(["None"]);
+    document.querySelectorAll("#symChips .chip").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s==="None"));setSev(0);}
+  catch(err){toast("Couldn't save. Check your connection and try again.");}
+});
+
+const PHASE={elim:"Everyday",d1:"Challenge day 1",d2:"Challenge day 2",d3:"Challenge day 3",wash:"Washout"};
+function renderLog(){
+  const el=$("#logList");
+  if(!entries.length){el.innerHTML=`<div class="empty"><b>No entries yet.</b><br>Log meals and how she felt afterward. Patterns show up after a week or two.</div>`;return;}
+  const byDay={}; entries.forEach(x=>{const k=new Date(x.ts).toDateString();(byDay[k]=byDay[k]||[]).push(x);});
+  el.innerHTML=Object.entries(byDay).map(([d,list])=>`<div class="day">${esc(new Date(list[0].ts).toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric"}))}</div>`+
+    list.map(x=>{const g=GROUPS.find(g=>g[0]===x.group);return `<div class="entry"><div class="top"><b style="min-width:0;overflow-wrap:anywhere">${esc(x.food)}</b><span class="t">${new Date(x.ts).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}</span></div>
+      <div>${x.phase!=="elim"?`<span class="tag">${esc(PHASE[x.phase])}${g?" · "+esc(g[1]):""}</span>`:""}<span class="sevbar s${x.severity}" aria-label="${SEV[x.severity]}"><i></i><i></i><i></i></span> <span class="note">${x.symptoms&&x.symptoms.length?esc(x.symptoms.join(", ")):"No symptoms"}</span></div>
+      ${x.notes?`<div class="note">${esc(x.notes)}</div>`:""}
+      <div><button type="button" class="small" data-del="${esc(x.id)}" style="margin-top:4px">Delete</button></div></div>`}).join("")).join("");
+}
+$("#logList").addEventListener("click",e=>{const id=e.target.dataset.del;if(!id)return;
+  if(e.target.dataset.confirm){store.remove(id).catch(()=>toast("Couldn't delete"));} else {e.target.dataset.confirm="1";e.target.textContent="Tap again to delete";setTimeout(()=>{if(e.target.isConnected){delete e.target.dataset.confirm;e.target.textContent="Delete";}},3000);}});
+
+/* ---------- reintro groups ---------- */
+const STAT=[["","Not tested"],["testing","Testing now"],["ok","Tolerated"],["limit","Small amounts OK"],["no","Not tolerated"]];
+function renderGroups(){
+  $("#groups").innerHTML=GROUPS.map(([k,n,food])=>{
+    const days=entries.filter(x=>x.group===k&&x.phase!=="wash"); const worst=days.reduce((m,x)=>Math.max(m,x.severity||0),0);
+    const st=statuses[k]||""; const dot=st==="ok"?"g":st==="limit"?"y":st==="no"?"r":"";
+    return `<div class="grp"><div class="nm">${dot?`<span class="dot ${dot}" style="display:inline-block;width:10px;height:10px;margin:0 6px 1px 0"></span>`:""}${esc(n)}</div>
+      <select aria-label="${esc(n)} status" data-g="${k}">${STAT.map(s=>`<option value="${s[0]}" ${s[0]===st?"selected":""}>${s[1]}</option>`).join("")}</select>
+      <div class="nt">Test food: ${esc(food)}${days.length?` · ${days.length} challenge day${days.length>1?"s":""} logged, worst: ${SEV[worst].toLowerCase()}`:""}</div></div>`;}).join("");
+}
+$("#groups").addEventListener("change",e=>{const g=e.target.dataset.g;if(g)store.setStatus(g,e.target.value).catch(()=>toast("Couldn't save"));});
+
+/* ---------- boot ---------- */
+entries=LS.get("gg-log",[]); statuses=LS.get("gg-status",{});
+renderFoods(); renderLog(); renderGroups();
+try{const t=localStorage.getItem("gg-tab"); if(t&&views[t]) show(t);}catch(e){}
+
+</script>
+</body></html>
