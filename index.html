@@ -424,13 +424,14 @@ const CHAINS=[
  ["Panera Bread","Lists ingredients per item. Soups and dressings commonly include onion or garlic."],
  ["Subway","Build simple: plain meat, cheese, lettuce, tomato, cucumber, mustard or oil and vinegar."],
  ["Starbucks","Almond or oat milk in moderation. Skip honey-sweetened drinks."],
- ["McDonald's",""],["Wendy's",""],["Taco Bell",""],["Panda Express",""],["Jersey Mike's",""],["Olive Garden",""],["Texas Roadhouse",""],
- ["Cracker Barrel",""],["Outback Steakhouse",""],["Applebee's",""],["Chili's",""],["Red Lobster",""],["Cheddar's",""],["Five Guys",""],["Zaxby's",""],["Culver's",""],["Dunkin'",""],["Firehouse Subs",""],["Moe's Southwest Grill",""],["P.F. Chang's",""],["LongHorn Steakhouse",""]
+ ["McDonald's","","mcdonalds"],["Wendy's",""],["Taco Bell",""],["Panda Express",""],["Jersey Mike's",""],["Olive Garden",""],["Texas Roadhouse",""],
+ ["Cracker Barrel",""],["Outback Steakhouse",""],["Applebee's",""],["Chili's",""],["Red Lobster",""],["Cheddar's",""],["Five Guys",""],["Zaxby's",""],["Culver's",""],["Dunkin'",""],["Firehouse Subs",""],["Moe's Southwest Grill","","mos moes"],["Jason's Deli","","jasons"],["McAllister's Deli","","mcallisters mcalisters"],["Raising Cane's","Chicken fingers are breaded in wheat. Cane's Sauce and Texas toast both contain garlic or onion. Crinkle fries are the simplest side.","raisin canes raising canes"],["Sonic Drive-In","","sonic"],["P.F. Chang's",""],["LongHorn Steakhouse",""]
 ];
 $("#cuisines").innerHTML=CUISINES.map(([n,rows])=>`<details class="cz"><summary>${esc(n)}</summary><div class="cols">${rows.map(([l,t])=>`<div><span class="dot ${l}" aria-label="${LV[l].word}"></span><span>${esc(t)}</span></div>`).join("")}</div></details>`).join("");
 function renderChains(){
-  const q=$("#chainQ").value.trim().toLowerCase();
-  $("#chains").innerHTML=CHAINS.filter(c=>!q||c[0].toLowerCase().includes(q)).map(([n,t])=>
+  const nz=x=>String(x).toLowerCase().replace(/[^a-z0-9 ]/g,"");
+  const q=nz($("#chainQ").value.trim());
+  $("#chains").innerHTML=CHAINS.slice().sort((a,b)=>a[0].localeCompare(b[0])).filter(c=>!q||nz(c[0]+" "+(c[2]||"")).includes(q)).map(([n,t])=>
     `<div class="chain"><div class="nm">${esc(n)}</div><a class="btnlink" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(n+" ingredient statement allergen menu")}">Ingredients ↗</a>${t?`<div class="nt">${esc(t)}</div>`:""}</div>`).join("")
     || `<p class="note">Not in the list. <a class="btnlink" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent($("#chainQ").value+" ingredient statement allergen menu")}">Search the web ↗</a></p>`;
 }
