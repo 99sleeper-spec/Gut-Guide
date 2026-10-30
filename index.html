@@ -5,39 +5,43 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Gut Guide">
-<meta name="theme-color" content="#1f6f63">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2315302c'/%3E%3Ccircle cx='32' cy='16' r='8' fill='%23d2453b'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23d9a400'/%3E%3Ccircle cx='32' cy='48' r='8' fill='%232f9e58'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#f6f2fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17121f" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%237a5aa8'/%3E%3Ccircle cx='32' cy='16' r='8' fill='%23d2453b'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23d9a400'/%3E%3Ccircle cx='32' cy='48' r='8' fill='%232f9e58'/%3E%3C/svg%3E">
 <title>Stacie's Gut Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
 <style>
 /* Layout: one-column phone app, sticky header, bottom tab bar; three views (Check, Log, Reintro). */
 :root{
-  --bg:#f3f6f5; --surface:#ffffff; --ink:#15302c; --muted:#5b706c; --line:#d7e1de; --accent:#1f6f63; --accent-ink:#ffffff;
-  --green:#2f9e58; --green-bg:#e3f4e8; --yellow:#d9a400; --yellow-bg:#fbf2d2; --red:#d2453b; --red-bg:#fbe3e0;
+  --bg:#f6f2fb; --surface:#ffffff; --ink:#2b2140; --muted:#6c6283; --line:#e6ddf2; --accent:#7a5aa8; --accent-ink:#ffffff;
+  --tint:#efe7fa; --tint-ink:#5b3f87; --housing:#3a2d55;
+  --green:#3a9f6b; --green-bg:#e4f4ec; --yellow:#d9a21b; --yellow-bg:#fbf1d6; --red:#d25563; --red-bg:#fbe5e9;
   --display:"Bricolage Grotesque",ui-rounded,"Segoe UI",system-ui,sans-serif;
   --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0f1918; --surface:#172422; --ink:#e4efec; --muted:#97aba7; --line:#2a3b38; --accent:#5cc3b1; --accent-ink:#06201c;
-  --green:#4cc777; --green-bg:#173323; --yellow:#f0c23a; --yellow-bg:#352c10; --red:#f0766c; --red-bg:#3a1c1a; color-scheme:dark}}
+  --bg:#17121f; --surface:#221b2e; --ink:#efe9f8; --muted:#aa9fc0; --line:#382e49; --accent:#c6aef0; --accent-ink:#241838;
+  --tint:#2e2441; --tint-ink:#d8c8f5; --housing:#0e0a14;
+  --green:#5ccb8e; --green-bg:#173025; --yellow:#efc451; --yellow-bg:#352b12; --red:#f08593; --red-bg:#3b1d24; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f1918; --surface:#172422; --ink:#e4efec; --muted:#97aba7; --line:#2a3b38; --accent:#5cc3b1; --accent-ink:#06201c;
-  --green:#4cc777; --green-bg:#173323; --yellow:#f0c23a; --yellow-bg:#352c10; --red:#f0766c; --red-bg:#3a1c1a; color-scheme:dark}
+  --bg:#17121f; --surface:#221b2e; --ink:#efe9f8; --muted:#aa9fc0; --line:#382e49; --accent:#c6aef0; --accent-ink:#241838;
+  --tint:#2e2441; --tint-ink:#d8c8f5; --housing:#0e0a14;
+  --green:#5ccb8e; --green-bg:#173025; --yellow:#efc451; --yellow-bg:#352b12; --red:#f08593; --red-bg:#3b1d24; color-scheme:dark}
 html,body{background:var(--bg);color:var(--ink)}
 body{margin:0;font-family:var(--body);font-size:16px;line-height:1.45}
 *{box-sizing:border-box}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 110px}
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 10px;display:flex;align-items:center;gap:12px}
-.lights{display:flex;flex-direction:column;gap:3px;background:var(--ink);padding:5px 4px;border-radius:9px}
+.lights{display:flex;flex-direction:column;gap:3px;background:var(--housing);padding:5px 4px;border-radius:9px}
 .lights i{width:9px;height:9px;border-radius:50%;display:block}
 .lights i:nth-child(1){background:var(--red)}.lights i:nth-child(2){background:var(--yellow)}.lights i:nth-child(3){background:var(--green)}
-h1{font-family:var(--display);font-weight:800;font-size:1.45rem;margin:0;letter-spacing:-.01em}
+h1{font-family:var(--display);font-weight:800;font-size:1.45rem;margin:0;letter-spacing:-.01em;color:var(--tint-ink)}
 .sub{color:var(--muted);font-size:.85rem;margin:0}
 h2{font-family:var(--display);font-weight:600;font-size:1.15rem;margin:0 0 4px;text-wrap:balance}
 .section{display:flex;flex-direction:column;gap:14px}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 1px 2px rgba(60,40,100,.05),0 6px 18px rgba(60,40,100,.05);padding:16px;display:flex;flex-direction:column;gap:12px}
 label.lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
 input[type=text],input[type=search],input[type=datetime-local],textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
 textarea{min-height:90px;resize:vertical}
@@ -55,7 +59,7 @@ button.small{padding:6px 10px;font-size:.85rem}
 .dot.g{background:var(--green)}.dot.y{background:var(--yellow)}.dot.r{background:var(--red)}
 .verdict{border-radius:14px;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
 .verdict.g{background:var(--green-bg)}.verdict.y{background:var(--yellow-bg)}.verdict.r{background:var(--red-bg)}
-.signal{display:flex;flex-direction:column;gap:5px;background:var(--ink);padding:7px 6px;border-radius:12px}
+.signal{display:flex;flex-direction:column;gap:5px;background:var(--housing);padding:7px 6px;border-radius:12px}
 .signal i{width:20px;height:20px;border-radius:50%;opacity:.18;display:block}
 .signal i.r{background:var(--red)}.signal i.y{background:var(--yellow)}.signal i.g{background:var(--green)}
 .signal i.on{opacity:1;box-shadow:0 0 10px currentColor}
@@ -63,6 +67,7 @@ button.small{padding:6px 10px;font-size:.85rem}
 .flags{display:flex;flex-direction:column;gap:6px;margin:8px 0 0;padding:0;list-style:none;font-size:.93rem}
 .flags b{font-weight:700}
 .note{color:var(--muted);font-size:.85rem}
+.note:empty{display:none}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{border-radius:999px;padding:6px 12px;font-weight:400;font-size:.9rem}
 .chip[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
@@ -82,9 +87,11 @@ button.small{padding:6px 10px;font-size:.85rem}
 .grp select{width:auto;padding:7px 8px;font-size:.9rem}
 .grp .nt{grid-column:1/-1;color:var(--muted);font-size:.88rem}
 .empty{text-align:center;color:var(--muted);padding:28px 10px;border:1px dashed var(--line);border-radius:14px}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
 nav.tabs button{border:0;border-radius:0;background:transparent;padding:12px 4px 14px;color:var(--muted);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
-nav.tabs button[aria-selected=true]{color:var(--accent)}
+nav.tabs button[aria-selected=true]{color:var(--tint-ink)}
+nav.tabs button[aria-selected=true] svg{background:var(--tint);border-radius:999px;padding:3px 14px;width:52px;height:30px}
+nav.tabs svg{transition:background .15s}
 nav.tabs svg{width:22px;height:22px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(80px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:20}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px;margin-right:6px}
@@ -92,6 +99,27 @@ nav.tabs svg{width:22px;height:22px}
 @media (prefers-reduced-motion:reduce){.spin{animation:none}}
 #reader{width:100%;border-radius:12px;overflow:hidden}
 #reader video{border-radius:12px}
+.sublbl{font-family:var(--display);font-weight:600;font-size:.95rem;margin:4px 0 0;color:var(--tint-ink)}
+.prod img{width:44px;height:44px;object-fit:contain;border-radius:8px;background:var(--tint)}
+.prod .ph{width:44px;height:44px;border-radius:8px;background:var(--tint);display:grid;place-items:center}
+.prod{grid-template-columns:auto 1fr auto;align-items:center}
+.prod .meta{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted)}
+.prod .meta .dot{width:10px;height:10px;margin:0}
+.dot.n{background:var(--line)}
+.callout{background:var(--tint);color:var(--ink);border-radius:12px;padding:12px 14px;font-size:.92rem}
+.callout b{color:var(--tint-ink)}
+details.cz{border-bottom:1px solid var(--line)}
+details.cz summary{list-style:none;cursor:pointer;padding:14px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700}
+details.cz summary::-webkit-details-marker{display:none}
+details.cz summary::after{content:"+";font-family:var(--display);font-size:1.3rem;color:var(--accent);line-height:1}
+details.cz[open] summary::after{content:"–"}
+.cols{display:flex;flex-direction:column;gap:10px;padding:0 0 14px}
+.cols div{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;font-size:.93rem}
+.cols .dot{width:12px;height:12px;margin-top:5px}
+.chain{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+.chain .nm{font-weight:700}
+.chain .nt{grid-column:1/-1;color:var(--muted);font-size:.9rem}
+a.btnlink{font-weight:700;color:var(--tint-ink);background:var(--tint);border-radius:10px;padding:7px 11px;text-decoration:none;font-size:.85rem;white-space:nowrap}
 .disclaim{font-size:.8rem;color:var(--muted);margin:4px 0 0}
 </style>
 </head><body>
@@ -105,15 +133,21 @@ nav.tabs svg{width:22px;height:22px}
   <!-- CHECK -->
   <main id="view-check" class="section">
     <div class="panel">
-      <h2>Check a food</h2>
-      <input type="search" id="q" placeholder="Try garlic, oats, avocado…" autocomplete="off" aria-label="Search foods">
+      <h2>Search</h2>
+      <form id="qForm" role="search"><input type="search" id="q" placeholder="Try avocado, RXBAR, Cheerios…" autocomplete="off" aria-label="Search foods and products" enterkeyhint="search"></form>
       <div class="foods" id="foods"></div>
       <p class="note" id="foodsMore"></p>
+      <button type="button" class="primary" id="prodBtn" hidden></button>
+      <div id="prodWrap" hidden>
+        <p class="sublbl" id="prodHead">Packaged products</p>
+        <div class="foods" id="prods"></div>
+        <button type="button" id="prodMore" hidden>Show more</button>
+      </div>
     </div>
 
     <div class="panel">
-      <h2>Check a packaged food</h2>
-      <p class="note">Scan the barcode to look up its ingredients in the free Open Food Facts database. If it isn't found, paste the ingredients instead.</p>
+      <h2>Scan or paste a label</h2>
+      <p class="note">Scan a barcode, or paste ingredients copied from a photo, a store website or a restaurant's ingredient list.</p>
       <div class="row">
         <button class="primary" id="scanCam" type="button">Scan barcode</button>
         <button id="stopCam" type="button" hidden>Stop camera</button>
@@ -129,6 +163,35 @@ nav.tabs svg{width:22px;height:22px}
     </div>
     <p class="disclaim">Ratings follow general low-FODMAP guidance for typical servings. Her dietitian's advice wins when it differs.</p>
   </main>
+
+  <!-- EATING OUT -->
+  <section id="view-out" class="section" hidden>
+    <div class="panel">
+      <h2>Eating out</h2>
+      <div class="callout"><b>Best move:</b> most chains post a full ingredient list online. Open it, copy the ingredients for the dish, and paste them into <b>Check → Scan or paste</b> for a red, yellow or green answer.</div>
+      <p class="note">Restaurants rarely list every ingredient, and most sauces, marinades and seasoning blends contain garlic or onion. On gentle FODMAP, small amounts are often tolerated. These are starting points, not guarantees.</p>
+    </div>
+    <div class="panel">
+      <h2>Ordering by cuisine</h2>
+      <div id="cuisines"></div>
+    </div>
+    <div class="panel">
+      <h2>Chain ingredient lists</h2>
+      <input type="search" id="chainQ" placeholder="Find a restaurant…" aria-label="Find a restaurant" autocomplete="off">
+      <div id="chains"></div>
+      <p class="note">Don't see one? Search the web for the restaurant's name plus "ingredient statement" or "allergen menu".</p>
+    </div>
+    <div class="panel">
+      <h2>What to ask for</h2>
+      <div class="cols">
+        <div><span class="dot g"></span><span>Sauce and dressing on the side, or oil and vinegar with lemon.</span></div>
+        <div><span class="dot g"></span><span>Protein grilled plain, with salt, pepper and oil only.</span></div>
+        <div><span class="dot g"></span><span>Swap beans, onion rings or slaw for rice, a plain potato or steamed vegetables.</span></div>
+        <div><span class="dot y"></span><span>"No onion or garlic" works for fresh-made dishes, but not for pre-marinated meat or ready-made sauces.</span></div>
+        <div><span class="dot y"></span><span>Real maple syrup instead of pancake syrup, which is usually high fructose corn syrup.</span></div>
+      </div>
+    </div>
+  </section>
 
   <!-- LOG -->
   <section id="view-log" class="section" hidden>
@@ -176,6 +239,7 @@ nav.tabs svg{width:22px;height:22px}
 
 <nav class="tabs" role="tablist">
   <button role="tab" aria-selected="true" data-v="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>Check</button>
+  <button role="tab" aria-selected="false" data-v="out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 21V3c-2 1-3 4-3 8h3"/></svg>Eat out</button>
   <button role="tab" aria-selected="false" data-v="log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Log</button>
   <button role="tab" aria-selected="false" data-v="re"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Reintro</button>
 </nav>
@@ -241,7 +305,7 @@ function signal(lv){return `<span class="signal" aria-hidden="true"><i class="r 
 function verdictHTML(lv,title,body){return `<div class="verdict ${lv}" role="status">${signal(lv)}<div style="min-width:0"><div class="big">${esc(LV[lv].word)}</div><div>${title}</div>${body||""}</div></div>`;}
 
 /* ---------- tabs ---------- */
-const views={check:"#view-check",log:"#view-log",re:"#view-re"};
+const views={check:"#view-check",out:"#view-out",log:"#view-log",re:"#view-re"};
 function show(v){document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v));
   Object.entries(views).forEach(([k,s])=>$(s).hidden=k!==v); window.scrollTo(0,0); try{localStorage.setItem("gg-tab",v)}catch(e){}}
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>show(b.dataset.v));
@@ -252,11 +316,85 @@ function renderFoods(){
   let list=q?FOODS.filter(f=>f[0].toLowerCase().includes(q)||f[2].toLowerCase().includes(q)):FOODS.filter(f=>["Garlic","Onion","Avocado","Oats (rolled)","Garlic-infused oil","Apples","Sweet potato","Strawberries"].includes(f[0])).sort((a,b)=>({r:0,y:1,g:2})[a[1]]-({r:0,y:1,g:2})[b[1]]);
   const order={r:0,y:1,g:2}; if(q) list=list.slice().sort((a,b)=>order[a[1]]-order[b[1]]);
   $("#foods").innerHTML=list.slice(0,30).map(f=>`<div class="food"><span class="dot ${f[1]}" aria-label="${LV[f[1]].word}"></span><div style="min-width:0"><div class="nm">${esc(f[0])}</div><div class="nt">${esc(f[2])}</div></div><button class="small" type="button" data-log="${esc(f[0])}">Log</button></div>`).join("")
-    || `<div class="food"><span class="dot y"></span><div><div class="nm">Not in the list</div><div class="nt">Paste its ingredients below, or ask her dietitian.</div></div><span></span></div>`;
-  $("#foodsMore").textContent=q?"":`Showing a few examples from ${FOODS.length} common foods. Type to search.`;
+    || `<div class="food"><span class="dot n"></span><div><div class="nm">No whole foods match</div><div class="nt">Search packaged products below, or paste ingredients.</div></div><span></span></div>`;
+  $("#foodsMore").textContent=q?"":`Showing a few examples from ${FOODS.length} common foods. Type to search foods and packaged products.`;
+  const btn=$("#prodBtn"); if(q.length>=2&&q!==prodQ.toLowerCase()){btn.hidden=false;btn.textContent=`Search packaged products for “${$("#q").value.trim()}”`;} else btn.hidden=true;
+  if(!q){$("#prodWrap").hidden=true;prodQ="";}
 }
 $("#q").addEventListener("input",renderFoods);
 $("#foods").addEventListener("click",e=>{const n=e.target.dataset.log;if(n){prefillLog(n);}});
+
+/* ---------- product search (Open Food Facts) ---------- */
+const PF="code,product_name,brands,ingredients_text_en,ingredients_text,image_front_small_url";
+let prodQ="", prodPage=1, prodList=[];
+function normBrand(b){return Array.isArray(b)?b[0]:(b||"").split(",")[0];}
+async function offSearch(q,page){
+  try{
+    const r=await fetch(`https://search.openfoodfacts.org/search?q=${encodeURIComponent(q)}&page_size=20&page=${page}&langs=en&fields=${PF}`);
+    if(!r.ok) throw 0; const j=await r.json(); if(!Array.isArray(j.hits)) throw 0;
+    return {items:j.hits, more:(j.page_count||1)>page};
+  }catch(e){
+    const r=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=20&page=${page}&sort_by=unique_scans_n&fields=${PF}`);
+    const j=await r.json(); return {items:j.products||[], more:(j.count||0)>page*20};
+  }
+}
+async function runProd(more){
+  const q=$("#q").value.trim(); if(q.length<2) return;
+  if(!more){prodQ=q;prodPage=1;prodList=[];} else prodPage++;
+  $("#prodWrap").hidden=false; $("#prodBtn").hidden=true; $("#prodMore").hidden=true;
+  $("#prodHead").innerHTML=`<span class="spin"></span>Searching products for “${esc(prodQ)}”…`;
+  try{
+    const {items,more:has}=await offSearch(prodQ,prodPage);
+    const seen=new Set(prodList.map(p=>p.code));
+    items.forEach(p=>{ if(p.product_name&&!seen.has(p.code)){seen.add(p.code);prodList.push(p);} });
+    $("#prodHead").textContent=prodList.length?`Packaged products · ${prodList.length}${has?"+":""}`:`No packaged products found for “${prodQ}”. Try the brand name alone, or a different spelling.`;
+    renderProds(); $("#prodMore").hidden=!has||!items.length;
+  }catch(e){ $("#prodHead").textContent="Couldn't reach the product database. Check the connection and try again."; }
+}
+function prodRating(p){const ing=p.ingredients_text_en||p.ingredients_text; return ing?scanText(ing).level:"n";}
+function renderProds(){
+  $("#prods").innerHTML=prodList.map((p,i)=>{const lv=prodRating(p);const b=normBrand(p.brands);
+    return `<div class="food prod">${p.image_front_small_url?`<img src="${esc(p.image_front_small_url)}" alt="" loading="lazy">`:`<span class="ph"></span>`}
+    <div style="min-width:0"><div class="nm">${esc(p.product_name)}</div><div class="meta"><span class="dot ${lv}"></span>${b?esc(b)+" · ":""}${lv==="n"?"No ingredients on file":esc(LV[lv].word)}</div></div>
+    <button class="small" type="button" data-p="${i}">${lv==="n"?"Paste":"Details"}</button></div>`;}).join("");
+}
+$("#prods").addEventListener("click",e=>{const i=e.target.dataset.p;if(i==null)return;const p=prodList[+i];
+  const name=[normBrand(p.brands),p.product_name].filter(Boolean).join(" "); const ing=p.ingredients_text_en||p.ingredients_text||"";
+  $("#prodName").value=name; $("#ing").value=ing;
+  if(ing){renderScan(scanText(ing),name);} else {$("#labelResult").innerHTML=`<p class="note">No ingredient list on file for ${esc(name)}. Copy it from a store website or the package and paste it above.</p>`; $("#ing").focus();}
+  $("#labelResult").scrollIntoView({behavior:"smooth",block:"center"});
+});
+$("#prodBtn").onclick=()=>runProd(false);
+$("#prodMore").onclick=()=>runProd(true);
+$("#qForm").addEventListener("submit",e=>{e.preventDefault();$("#q").blur();runProd(false);});
+
+/* ---------- eating out ---------- */
+const CUISINES=[
+ ["American grill & burgers",[["g","Plain burger patty, grilled chicken or steak, baked potato with butter, side salad with oil and vinegar."],["y","One regular bun, cheese, fries (fine, but often seasoned or shared fryer)."],["r","Onion rings, BBQ sauce, ranch, gravy, seasoned rubs, coleslaw."]]],
+ ["Mexican & Tex-Mex",[["g","Corn tortillas, grilled fish, lettuce, hard cheese, fresh tomato without onion."],["y","Seasoned rice and marinated meats (often cooked with garlic or onion), sour cream, queso."],["r","Beans, pico de gallo, salsa, guacamole (onion), flour tortillas in quantity."]]],
+ ["Italian",[["g","Grilled fish or chicken, plain risotto made without onion (ask), parmesan."],["y","A small portion of pasta with olive oil, butter or parmesan."],["r","Marinara and most tomato sauces, garlic bread, Alfredo and cream sauces, minestrone."]]],
+ ["Chinese, Thai & Japanese",[["g","Steamed rice, rice noodles, sashimi, plain grilled meat or fish, edamame in a small handful."],["y","Sushi rolls, soy sauce, fried rice, pad thai (garlic and shallot are common)."],["r","Stir-fry sauces, teriyaki, General Tso's, sweet and sour, anything with garlic or onion in the name."]]],
+ ["Breakfast & diners",[["g","Eggs any style, bacon, plain hash browns, oatmeal made with water, strawberries or blueberries."],["y","Toast, pancakes or waffles, regular milk in coffee."],["r","Home fries with onion, sausage gravy, pancake syrup (corn syrup), apple or pear sides."]]],
+ ["Steakhouse",[["g","Steak with salt and pepper, baked potato, steamed carrots or green beans."],["y","Dinner rolls, loaded potato toppings (sour cream, cheese)."],["r","Garlic butter on steak, onion straws or blooming onion, creamed spinach, mushrooms."]]],
+ ["Sandwich & sub shops",[["g","Turkey, roast beef or ham with lettuce, tomato, cucumber, cheese, mustard or mayo."],["y","Regular wheat bread or a wrap (gentle FODMAP usually allows one serving)."],["r","Onions, pickled peppers in garlic, most specialty sauces, garlic bread."]]]
+];
+const CHAINS=[
+ ["Chipotle","Rice, lettuce, cheese and a protein are the easier picks. Beans, salsas and guacamole contain onion or are high-FODMAP."],
+ ["Chick-fil-A","Waffle fries and grilled chicken are the simpler options. Most dipping sauces contain onion or garlic."],
+ ["Panera Bread","Lists ingredients per item. Soups and dressings commonly include onion or garlic."],
+ ["Subway","Build simple: plain meat, cheese, lettuce, tomato, cucumber, mustard or oil and vinegar."],
+ ["Starbucks","Almond or oat milk in moderation. Skip honey-sweetened drinks."],
+ ["McDonald's",""],["Wendy's",""],["Taco Bell",""],["Panda Express",""],["Jersey Mike's",""],["Olive Garden",""],["Texas Roadhouse",""],
+ ["Cracker Barrel",""],["Outback Steakhouse",""],["Applebee's",""],["Chili's",""],["Red Lobster",""],["Cheddar's",""],["Five Guys",""],["Zaxby's",""],["Culver's",""],["Dunkin'",""],["Firehouse Subs",""],["Moe's Southwest Grill",""],["P.F. Chang's",""],["LongHorn Steakhouse",""]
+];
+$("#cuisines").innerHTML=CUISINES.map(([n,rows])=>`<details class="cz"><summary>${esc(n)}</summary><div class="cols">${rows.map(([l,t])=>`<div><span class="dot ${l}" aria-label="${LV[l].word}"></span><span>${esc(t)}</span></div>`).join("")}</div></details>`).join("");
+function renderChains(){
+  const q=$("#chainQ").value.trim().toLowerCase();
+  $("#chains").innerHTML=CHAINS.filter(c=>!q||c[0].toLowerCase().includes(q)).map(([n,t])=>
+    `<div class="chain"><div class="nm">${esc(n)}</div><a class="btnlink" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(n+" ingredient statement allergen menu")}">Ingredients ↗</a>${t?`<div class="nt">${esc(t)}</div>`:""}</div>`).join("")
+    || `<p class="note">Not in the list. <a class="btnlink" target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent($("#chainQ").value+" ingredient statement allergen menu")}">Search the web ↗</a></p>`;
+}
+$("#chainQ").addEventListener("input",renderChains); renderChains();
 
 /* ---------- label check (paste) ---------- */
 function renderScan(res,name,extra){
