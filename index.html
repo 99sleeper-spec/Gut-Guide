@@ -7,6 +7,8 @@
 <meta name="apple-mobile-web-app-title" content="Gut Guide">
 <meta name="theme-color" content="#f6f2fb" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#17121f" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%237a5aa8'/%3E%3Ccircle cx='32' cy='16' r='8' fill='%23d2453b'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23d9a400'/%3E%3Ccircle cx='32' cy='48' r='8' fill='%232f9e58'/%3E%3C/svg%3E">
 <title>Stacie's Gut Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -161,6 +163,11 @@ a.btnlink{font-weight:700;color:var(--tint-ink);background:var(--tint);border-ra
       <div class="row"><input type="text" id="prodName" placeholder="Product name (optional)" aria-label="Product name"><button id="scanBtn" type="button">Check ingredients</button></div>
       <div id="labelResult"></div>
     </div>
+    <details class="panel" id="settings">
+      <summary class="sublbl" style="cursor:pointer;margin:0">Search settings</summary>
+      <p class="note">Product search uses the USDA's free database of US packaged foods. The shared demo key allows about 50 searches a day. A free personal key raises that to 1,000 an hour: sign up at <b>fdc.nal.usda.gov/api-key-signup</b>, then paste the key from the email here. It stays on this phone only.</p>
+      <div class="row"><input type="text" id="fdcKey" placeholder="Paste your USDA key" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="USDA API key"><button type="button" id="fdcSave">Save key</button></div>
+    </details>
     <p class="disclaim">Ratings follow general low-FODMAP guidance for typical servings. Her dietitian's advice wins when it differs.</p>
   </main>
 
@@ -324,49 +331,81 @@ function renderFoods(){
 $("#q").addEventListener("input",renderFoods);
 $("#foods").addEventListener("click",e=>{const n=e.target.dataset.log;if(n){prefillLog(n);}});
 
-/* ---------- product search (Open Food Facts) ---------- */
-const PF="code,product_name,brands,ingredients_text_en,ingredients_text,image_front_small_url";
-let prodQ="", prodPage=1, prodList=[];
-function normBrand(b){return Array.isArray(b)?b[0]:(b||"").split(",")[0];}
+/* ---------- product search: USDA FoodData Central + Open Food Facts ---------- */
+const PF="code,product_name,product_name_en,generic_name,brands,ingredients_text_en,ingredients_text,image_front_small_url";
+let prodQ="", prodPage=1, prodList=[], fdcMore=false, offMore=false;
+function fdcKey(){try{return localStorage.getItem("gg-fdc-key")||"DEMO_KEY"}catch(e){return "DEMO_KEY"}}
+const upcNorm=c=>String(c||"").replace(/\D/g,"").replace(/^0+/,"");
+const SMALL=new Set(["and","or","of","with","in","a","the","&"]);
+function tidy(t){t=String(t||"").trim(); if(t&&t===t.toUpperCase()&&/[A-Z]/.test(t)) t=t.toLowerCase().replace(/\b[a-z]/g,(c,i)=>c.toUpperCase()).replace(/\b(And|Or|Of|With|In|A|The)\b/g,(w,_,i)=>i?w.toLowerCase():w); return t;}
+function normBrand(b){return tidy(Array.isArray(b)?b[0]:(b||"").split(",")[0]);}
+function fromOff(p){const name=p.product_name||p.product_name_en||p.generic_name; if(!name) return null;
+  return {upc:upcNorm(p.code),name:tidy(name),brand:normBrand(p.brands),ing:p.ingredients_text_en||p.ingredients_text||"",img:p.image_front_small_url||"",src:"Open Food Facts"};}
+function fromFdc(f){return {upc:upcNorm(f.gtinUpc),name:tidy(f.description),brand:tidy(f.brandName||f.brandOwner||""),ing:f.ingredients||"",img:"",src:"USDA"};}
+async function fdcSearch(q,page){
+  const r=await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${encodeURIComponent(fdcKey())}&query=${encodeURIComponent(q)}&dataType=Branded&pageSize=25&pageNumber=${page}`);
+  if(r.status===429) throw {code:"limit"}; if(!r.ok) throw {code:"http"};
+  const j=await r.json(); return {items:(j.foods||[]).map(fromFdc), more:(j.totalPages||1)>page};
+}
 async function offSearch(q,page){
+  let items, more;
   try{
     const r=await fetch(`https://search.openfoodfacts.org/search?q=${encodeURIComponent(q)}&page_size=20&page=${page}&langs=en&fields=${PF}`);
     if(!r.ok) throw 0; const j=await r.json(); if(!Array.isArray(j.hits)) throw 0;
-    return {items:j.hits, more:(j.page_count||1)>page};
+    items=j.hits; more=(j.page_count||1)>page;
   }catch(e){
     const r=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=20&page=${page}&sort_by=unique_scans_n&fields=${PF}`);
-    const j=await r.json(); return {items:j.products||[], more:(j.count||0)>page*20};
+    const j=await r.json(); items=j.products||[]; more=(j.count||0)>page*20;
   }
+  return {items:items.map(fromOff).filter(Boolean), more};
 }
 async function runProd(more){
   const q=$("#q").value.trim(); if(q.length<2) return;
-  if(!more){prodQ=q;prodPage=1;prodList=[];} else prodPage++;
+  if(!more){prodQ=q;prodPage=1;prodList=[];fdcMore=true;offMore=true;} else prodPage++;
   $("#prodWrap").hidden=false; $("#prodBtn").hidden=true; $("#prodMore").hidden=true;
   $("#prodHead").innerHTML=`<span class="spin"></span>Searching products for “${esc(prodQ)}”…`;
-  try{
-    const {items,more:has}=await offSearch(prodQ,prodPage);
-    const seen=new Set(prodList.map(p=>p.code));
-    items.forEach(p=>{ if(p.product_name&&!seen.has(p.code)){seen.add(p.code);prodList.push(p);} });
-    $("#prodHead").textContent=prodList.length?`Packaged products · ${prodList.length}${has?"+":""}`:`No packaged products found for “${prodQ}”. Try the brand name alone, or a different spelling.`;
-    renderProds(); $("#prodMore").hidden=!has||!items.length;
-  }catch(e){ $("#prodHead").textContent="Couldn't reach the product database. Check the connection and try again."; }
+  const [fd,of]=await Promise.allSettled([fdcMore?fdcSearch(prodQ,prodPage):Promise.resolve({items:[],more:false}), offMore?offSearch(prodQ,prodPage):Promise.resolve({items:[],more:false})]);
+  const fdItems=fd.status==="fulfilled"?fd.value.items:[], ofItems=of.status==="fulfilled"?of.value.items:[];
+  fdcMore=fd.status==="fulfilled"&&fd.value.more; offMore=of.status==="fulfilled"&&of.value.more;
+  // merge: USDA first (US labels), fill gaps (photos, missing ingredients) from Open Food Facts
+  const byUpc=new Map(prodList.filter(p=>p.upc).map(p=>[p.upc,p]));
+  const seenName=new Set(prodList.map(p=>(p.brand+"|"+p.name).toLowerCase()));
+  for(const p of [...fdItems,...ofItems]){
+    const ex=p.upc&&byUpc.get(p.upc);
+    if(ex){ if(!ex.img&&p.img) ex.img=p.img; if(!ex.ing&&p.ing){ex.ing=p.ing;ex.src=p.src;} continue; }
+    const k=(p.brand+"|"+p.name).toLowerCase(); if(seenName.has(k)) continue;
+    seenName.add(k); if(p.upc) byUpc.set(p.upc,p); prodList.push(p);
+  }
+  const has=fdcMore||offMore;
+  let msg=prodList.length?`Packaged products · ${prodList.length}${has?"+":""}`:`No packaged products found for “${prodQ}”. Try the brand name alone, or a different spelling.`;
+  if(fd.status==="rejected"&&fd.reason&&fd.reason.code==="limit") msg+=" · USDA search hit its hourly limit (see Search settings below).";
+  else if(fd.status==="rejected"&&of.status==="rejected") msg="Couldn't reach the product databases. Check the connection and try again.";
+  $("#prodHead").textContent=msg;
+  renderProds(); $("#prodMore").hidden=!has;
 }
-function prodRating(p){const ing=p.ingredients_text_en||p.ingredients_text; return ing?scanText(ing).level:"n";}
+function prodRating(p){return p.ing?scanText(p.ing).level:"n";}
 function renderProds(){
-  $("#prods").innerHTML=prodList.map((p,i)=>{const lv=prodRating(p);const b=normBrand(p.brands);
-    return `<div class="food prod">${p.image_front_small_url?`<img src="${esc(p.image_front_small_url)}" alt="" loading="lazy">`:`<span class="ph"></span>`}
-    <div style="min-width:0"><div class="nm">${esc(p.product_name)}</div><div class="meta"><span class="dot ${lv}"></span>${b?esc(b)+" · ":""}${lv==="n"?"No ingredients on file":esc(LV[lv].word)}</div></div>
+  $("#prods").innerHTML=prodList.map((p,i)=>{const lv=prodRating(p);
+    return `<div class="food prod">${p.img?`<img src="${esc(p.img)}" alt="" loading="lazy">`:`<span class="ph" aria-hidden="true"><span class="dot ${lv}" style="margin:0"></span></span>`}
+    <div style="min-width:0"><div class="nm">${esc(p.name)}</div><div class="meta"><span class="dot ${lv}"></span>${p.brand?esc(p.brand)+" · ":""}${lv==="n"?"No ingredients on file":esc(LV[lv].word)}</div></div>
     <button class="small" type="button" data-p="${i}">${lv==="n"?"Paste":"Details"}</button></div>`;}).join("");
 }
 $("#prods").addEventListener("click",e=>{const i=e.target.dataset.p;if(i==null)return;const p=prodList[+i];
-  const name=[normBrand(p.brands),p.product_name].filter(Boolean).join(" "); const ing=p.ingredients_text_en||p.ingredients_text||"";
-  $("#prodName").value=name; $("#ing").value=ing;
-  if(ing){renderScan(scanText(ing),name);} else {$("#labelResult").innerHTML=`<p class="note">No ingredient list on file for ${esc(name)}. Copy it from a store website or the package and paste it above.</p>`; $("#ing").focus();}
+  const name=[p.brand,p.name].filter(Boolean).join(" ");
+  $("#prodName").value=name; $("#ing").value=p.ing;
+  if(p.ing){renderScan(scanText(p.ing),name,`<p class="note" style="margin:8px 0 0">Ingredients from ${p.src}. Recipes change, so glance at the package when you can.</p>`);}
+  else {$("#labelResult").innerHTML=`<p class="note">No ingredient list on file for ${esc(name)}. Copy it from a store website or the package and paste it above.</p>`; $("#ing").focus();}
   $("#labelResult").scrollIntoView({behavior:"smooth",block:"center"});
 });
 $("#prodBtn").onclick=()=>runProd(false);
 $("#prodMore").onclick=()=>runProd(true);
 $("#qForm").addEventListener("submit",e=>{e.preventDefault();$("#q").blur();runProd(false);});
+
+/* search settings */
+(function(){
+  const k=fdcKey(); $("#fdcKey").value=k==="DEMO_KEY"?"":k;
+  $("#fdcSave").onclick=()=>{const v=$("#fdcKey").value.trim(); try{v?localStorage.setItem("gg-fdc-key",v):localStorage.removeItem("gg-fdc-key");}catch(e){} toast(v?"Key saved on this phone":"Using the shared demo key");};
+})();
 
 /* ---------- eating out ---------- */
 const CUISINES=[
@@ -408,17 +447,20 @@ $("#scanBtn").onclick=()=>{const t=$("#ing").value.trim(); if(!t){toast("Paste t
 async function lookup(code){
   code=String(code).replace(/\D/g,""); if(code.length<8){toast("That barcode looks too short");return;}
   $("#lookupNote").textContent="Looking up "+code+"…";
+  let p=null;
   try{
-    const r=await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?fields=product_name,brands,ingredients_text_en,ingredients_text`);
-    const j=await r.json();
-    const p=j&&j.product; const ing=p&&(p.ingredients_text_en||p.ingredients_text);
-    if(!p){$("#lookupNote").textContent=`Barcode ${code} isn't in the database yet. Paste the ingredients below.`;return;}
-    const name=[p.brands&&p.brands.split(",")[0],p.product_name].filter(Boolean).join(" ");
-    $("#prodName").value=name;
-    if(!ing){$("#lookupNote").textContent=`Found ${name||"the product"}, but it has no ingredient list on file. Paste it below.`;return;}
-    $("#ing").value=ing; $("#lookupNote").textContent="Ingredients from Open Food Facts. Double-check against the package.";
-    renderScan(scanText(ing),name);
-  }catch(e){$("#lookupNote").textContent="Couldn't reach the database. Check the connection, or paste the ingredients.";}
+    const r=await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?fields=${PF}`);
+    const j=await r.json(); if(j&&j.product) p=fromOff({...j.product,code});
+  }catch(e){}
+  if(!p||!p.ing){
+    try{ const {items}=await fdcSearch(code,1); const hit=items.find(x=>x.upc===upcNorm(code)&&x.ing); if(hit) p=hit; }catch(e){}
+  }
+  if(!p){$("#lookupNote").textContent=`Barcode ${code} isn't in either database yet. Paste the ingredients below.`;return;}
+  const name=[p.brand,p.name].filter(Boolean).join(" ");
+  $("#prodName").value=name;
+  if(!p.ing){$("#lookupNote").textContent=`Found ${name||"the product"}, but it has no ingredient list on file. Paste it below.`;return;}
+  $("#ing").value=p.ing; $("#lookupNote").textContent=`Ingredients from ${p.src}. Double-check against the package.`;
+  renderScan(scanText(p.ing),name);
 }
 let cam=null;
 async function stopCam(){ if(cam){try{await cam.stop();}catch(e){} try{cam.clear();}catch(e){} cam=null;} $("#stopCam").hidden=true; $("#scanCam").hidden=false; }
