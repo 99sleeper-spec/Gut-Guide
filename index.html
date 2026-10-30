@@ -419,13 +419,36 @@ const CUISINES=[
  ["Sandwich & sub shops",[["g","Turkey, roast beef or ham with lettuce, tomato, cucumber, cheese, mustard or mayo."],["y","Regular wheat bread or a wrap (gentle FODMAP usually allows one serving)."],["r","Onions, pickled peppers in garlic, most specialty sauces, garlic bread."]]]
 ];
 const CHAINS=[
- ["Chipotle","Rice, lettuce, cheese and a protein are the easier picks. Beans, salsas and guacamole contain onion or are high-FODMAP."],
+ ["Applebee's","Many entrées are pre-marinated. Ask for grilled chicken or a burger patty with no seasoning, plus steamed broccoli or fries. Dressings and sauces usually contain garlic or onion."],
+ ["Cheddar's","Plain grilled chicken or fish with a baked potato is the simplest order. The croissants come with honey butter, so ask for plain butter."],
  ["Chick-fil-A","Waffle fries and grilled chicken are the simpler options. Most dipping sauces contain onion or garlic."],
+ ["Chili's","Ask for plain grilled chicken or a burger patty, no seasoning. Fajitas come with onions, the rice is seasoned, and the salsa contains onion."],
+ ["Chipotle","Rice, lettuce, cheese and a protein are the easier picks. Beans, salsas and guacamole contain onion or are high-FODMAP."],
+ ["Cracker Barrel","Breakfast is easiest: eggs, bacon, grits, plain toast. Ask for real maple syrup. The hashbrown casserole and the green beans are cooked with onion."],
+ ["Culver's","A plain ButterBurger with lettuce, tomato and mustard, with fries. Frozen custard is dairy, so keep it to a small cup. Skip onion rings."],
+ ["Dunkin'","Egg and cheese on an English muffin, or a plain bagel. Flavor shots are unsweetened and dairy-free; flavor swirls contain condensed milk. Almond or oat milk in drinks."],
+ ["Firehouse Subs","Build simple: turkey, ham or roast beef, provolone, lettuce, tomato, mayo or mustard. Skip onions and the specialty sauces."],
+ ["Five Guys","Choose toppings yourself: lettuce, tomato, pickles, mustard, mayo. Order regular fries, since the Cajun seasoning has garlic and onion. Skip onions and steak sauce."],
+ ["Jason's Deli","The salad bar lets her build exactly what she wants: lettuce, carrots, cucumber, tomato, egg, hard cheese, oil and vinegar. Ask about gluten-free bread for sandwiches.","jasons"],
+ ["Jersey Mike's","Turkey, ham or roast beef with provolone, lettuce, tomato, and oil and vinegar. Skip onions and the cherry pepper relish."],
+ ["LongHorn Steakhouse","Ask for the steak with salt and pepper only, a plain baked potato, and steamed broccoli. Skip asparagus, mushrooms and onion toppings."],
+ ["McAllister's Deli","A turkey or ham sandwich with lettuce, tomato, cheese and mayo, no onion. A plain baked potato with butter and cheese is an easy side.","mcallisters mcalisters"],
+ ["McDonald's","The beef patties are seasoned with just salt and pepper. Order a plain burger or McDouble with no onions, plus fries or a hash brown. Skip Big Mac sauce and the onions.","mcdonalds"],
+ ["Moe's Southwest Grill","Like Chipotle: rice, chicken or steak, lettuce and cheese with corn tortilla chips. Skip beans, pico de gallo, salsas and guacamole.","mos moes"],
+ ["Olive Garden","Breadsticks are topped with garlic, and most sauces contain garlic. Ask for grilled chicken or salmon with steamed broccoli, and the salad with oil and vinegar, no onions or croutons."],
+ ["Outback Steakhouse","Ask for the steak with no seasoning rub, a plain baked potato and steamed vegetables. Skip the Bloomin' Onion."],
+ ["P.F. Chang's","Even the gluten-free dishes use garlic and onion. Ask for steamed chicken or shrimp with steamed vegetables and plain rice, sauce on the side."],
+ ["Panda Express","Steamed white rice is the safe base. Nearly every entrée sauce has garlic, onion or honey. Grilled Teriyaki Chicken with the sauce on the side is the plainest protein."],
  ["Panera Bread","Lists ingredients per item. Soups and dressings commonly include onion or garlic."],
- ["Subway","Build simple: plain meat, cheese, lettuce, tomato, cucumber, mustard or oil and vinegar."],
+ ["Raising Cane's","Chicken fingers are breaded in wheat. Cane's Sauce and Texas toast both contain garlic or onion. Crinkle fries are the simplest side.","raisin canes raising canes"],
+ ["Red Lobster","Cheddar Bay Biscuits contain garlic. Ask for broiled or grilled fish or shrimp with lemon and no garlic butter, and a baked potato instead of rice pilaf."],
+ ["Sonic Drive-In","A plain hamburger or grilled chicken sandwich, no onion, with fries. Most sodas and slushes are sweetened with high fructose corn syrup, so unsweetened tea or diet drinks are safer.","sonic"],
  ["Starbucks","Almond or oat milk in moderation. Skip honey-sweetened drinks."],
- ["McDonald's","","mcdonalds"],["Wendy's",""],["Taco Bell",""],["Panda Express",""],["Jersey Mike's",""],["Olive Garden",""],["Texas Roadhouse",""],
- ["Cracker Barrel",""],["Outback Steakhouse",""],["Applebee's",""],["Chili's",""],["Red Lobster",""],["Cheddar's",""],["Five Guys",""],["Zaxby's",""],["Culver's",""],["Dunkin'",""],["Firehouse Subs",""],["Moe's Southwest Grill","","mos moes"],["Jason's Deli","","jasons"],["McAllister's Deli","","mcallisters mcalisters"],["Raising Cane's","Chicken fingers are breaded in wheat. Cane's Sauce and Texas toast both contain garlic or onion. Crinkle fries are the simplest side.","raisin canes raising canes"],["Sonic Drive-In","","sonic"],["P.F. Chang's",""],["LongHorn Steakhouse",""]
+ ["Subway","Build simple: plain meat, cheese, lettuce, tomato, cucumber, mustard or oil and vinegar."],
+ ["Taco Bell","Hard to do well: the seasoned beef, beans and most sauces contain onion or garlic. Rice, cheese, lettuce and tomato are the plainer pieces."],
+ ["Texas Roadhouse","Ask for the steak with salt and pepper only, and a plain baked potato. The rolls come with honey cinnamon butter, and the green beans are cooked with onion."],
+ ["Wendy's","A plain baked potato with butter is an easy side. Order a plain hamburger with no onion. The chili has beans and onion, and a Frosty is dairy."],
+ ["Zaxby's","Chicken fingers are breaded in wheat, and Zax Sauce and Texas toast contain garlic. Crinkle fries, or a grilled chicken salad with oil-based dressing, are simpler."]
 ];
 $("#cuisines").innerHTML=CUISINES.map(([n,rows])=>`<details class="cz"><summary>${esc(n)}</summary><div class="cols">${rows.map(([l,t])=>`<div><span class="dot ${l}" aria-label="${LV[l].word}"></span><span>${esc(t)}</span></div>`).join("")}</div></details>`).join("");
 function renderChains(){
